@@ -252,18 +252,13 @@ def make_supervised_data_module(
     return dict(train_dataset=train_dataset, eval_dataset=eval_dataset)
 
 
-def train():
+def train(
+    model_args,
+    data_args,
+    training_args,
+    lora_args,
+):
     global local_rank
-    
-    parser = transformers.HfArgumentParser(
-        (ModelArguments, DataArguments, TrainingArguments, LoraArguments)
-    )
-    (
-        model_args,
-        data_args,
-        training_args,
-        lora_args,
-    ) = parser.parse_args_into_dataclasses()
 
     if getattr(training_args, 'deepspeed', None) and getattr(lora_args, 'q_lora', False):
         training_args.distributed_state.distributed_type = DistributedType.DEEPSPEED
